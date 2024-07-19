@@ -16,7 +16,7 @@ public class HabrCareerParse {
     private static final String SOURCE_LINK = "https://career.habr.com";
     public static final String PREFIX = "/vacancies?page=";
     public static final String SUFFIX = "&q=Java%20developer&type=all";
-    public static final int PAGE_LIMITER = 1; /*Не забыть вернуть назад 5*/
+    public static final int PAGE_LIMITER = 5;
 
     private String retrieveDescription(String link) throws IOException {
         Connection connection = Jsoup.connect(link);
