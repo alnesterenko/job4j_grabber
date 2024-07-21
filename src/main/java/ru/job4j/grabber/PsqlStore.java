@@ -54,13 +54,7 @@ public class PsqlStore implements Store, AutoCloseable {
         try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM post")) {
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    posts.add(new Post(
-                            resultSet.getInt("id"),
-                            resultSet.getString("name"),
-                            resultSet.getString("link"),
-                            resultSet.getString("text"),
-                            resultSet.getTimestamp("created").toLocalDateTime()
-                    ));
+                    posts.add(createNewPostFromDatabaseData(resultSet));
                 }
             }
         } catch (SQLException e) {
@@ -76,13 +70,7 @@ public class PsqlStore implements Store, AutoCloseable {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    result = new Post(
-                            resultSet.getInt("id"),
-                            resultSet.getString("name"),
-                            resultSet.getString("link"),
-                            resultSet.getString("text"),
-                            resultSet.getTimestamp("created").toLocalDateTime()
-                    );
+                    result = createNewPostFromDatabaseData(resultSet);
                 }
             }
         } catch (SQLException e) {
@@ -98,20 +86,13 @@ public class PsqlStore implements Store, AutoCloseable {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        Properties config = new Properties();
-        try (InputStream in = PsqlStore.class.getClassLoader().getResourceAsStream(
-                "db/rabbit.properties")) {
-            config.load(in);
-        }
-        PsqlStore psqlStore = new PsqlStore(config);
-        Post testPost = new Post("Работа-сказка", "https://career.habr.com/3", "Бегите отсюда! Спасайся, кто может!", LocalDateTime.now());
-        psqlStore.save(testPost);
-        System.out.println(psqlStore.findById(1));
-        System.out.println(psqlStore.findById(571));
-        List<Post> posts = psqlStore.getAll();
-        for (Post onePost : posts) {
-            System.out.println(onePost);
-        }
+    private Post createNewPostFromDatabaseData(ResultSet resultSet) throws SQLException {
+       return new Post(
+               resultSet.getInt("id"),
+               resultSet.getString("name"),
+               resultSet.getString("link"),
+               resultSet.getString("text"),
+               resultSet.getTimestamp("created").toLocalDateTime()
+       );
     }
 }

@@ -106,12 +106,4 @@ public class HabrCareerParse implements Parse {
                 "");
         return tempString;
     }
-
-    public static void main(String[] args) throws IOException {
-        HabrCareerParse habrCareerParse = new HabrCareerParse(new HabrCareerDateTimeParser());
-        List<Post> listOf125Vacancies = habrCareerParse.list("https://career.habr.com/vacancies/java_developer");
-        for (Post onePost : listOf125Vacancies) {
-            System.out.println(onePost);
-        }
-    }
 }
