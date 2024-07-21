@@ -72,7 +72,7 @@ public class HabrCareerParse implements Parse {
             e.printStackTrace();
         }
         Elements rows = document.select(".faded-content__body");
-        return cutOffHTMLTags(rows.get(0));
+        return cutOffHTMLClassesFromTags(rows.get(0));
     }
 
     /**
